@@ -16,6 +16,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tile Road Strait
       objectReference: {fileID: 0}
+    - target: {fileID: 5660185417220241343, guid: a9ecab91c7955714ea5490ff12067ab2, type: 3}
+      propertyPath: isPlaceable
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7111681949217844751, guid: a9ecab91c7955714ea5490ff12067ab2, type: 3}
       propertyPath: m_LocalPosition.x
       value: 40

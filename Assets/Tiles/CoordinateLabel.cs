@@ -4,6 +4,7 @@ using System;
 using System.Reflection.Emit;
 
 [ExecuteAlways]
+[RequireComponent(typeof(TextMeshPro))]
 public class CoordinateLabel : MonoBehaviour
 {
     [SerializeField] Color defaultColor = Color.white;
@@ -30,7 +31,7 @@ public class CoordinateLabel : MonoBehaviour
             UpdateObjectName();
         }
 
-        ColorCoordinates();
+        SetLabelColor();
         ToggleLable();
     }
 
@@ -42,7 +43,7 @@ public class CoordinateLabel : MonoBehaviour
         }
     }
 
-    private void ColorCoordinates()
+    private void SetLabelColor()
     {
         label.color = waypoint.IsPlaceable ? defaultColor : blockedColor; 
     }

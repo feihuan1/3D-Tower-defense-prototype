@@ -3,27 +3,42 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using UnityEngine;
 
-public class EnemyMover : MonoBehaviour
-{   
-    
-    [SerializeField] List<Waypoint> path = new List<Waypoint>();
-    [SerializeField] [Range(0f, 5f)] float speed = 1f;
 
-    void Start()
+[RequireComponent(typeof(Enemy))]
+public class EnemyMover : MonoBehaviour
+{
+
+    [SerializeField] List<Waypoint> path = new List<Waypoint>();
+    [SerializeField][Range(0f, 5f)] float speed = 1f;
+
+    Enemy enemy;
+
+    void OnEnable()
     {
         FindPath();
         ReturnToStart();
         StartCoroutine(FlllowPath());
     }
 
+    private void Start()
+    {
+        enemy = GetComponent<Enemy>();
+    }
+
     void FindPath()
     {
         path.Clear();
-        GameObject[] waypoints = GameObject.FindGameObjectsWithTag("Path");
 
-        foreach (GameObject waypoint in waypoints)
+        GameObject parent = GameObject.FindGameObjectWithTag("Path");
+
+        foreach (Transform child in parent.transform)
         {
-            path.Add(waypoint.GetComponent<Waypoint>());
+            Waypoint waypoint = child.GetComponent<Waypoint>();
+
+            if (waypoint != null)
+            {
+                path.Add(waypoint);
+            }
         }
     }
 
@@ -32,9 +47,15 @@ public class EnemyMover : MonoBehaviour
         transform.position = path[0].transform.position;
     }
 
+    void FinishPath()
+    {
+        enemy.StealGold();
+        gameObject.SetActive(false);
+    }
+
     IEnumerator FlllowPath()
     {
-        foreach(Waypoint waypoint in path)
+        foreach (Waypoint waypoint in path)
         {
             Vector3 startPosition = transform.position;
             Vector3 endtPosition = waypoint.transform.position;
@@ -42,14 +63,14 @@ public class EnemyMover : MonoBehaviour
 
             transform.LookAt(endtPosition);
 
-            while(travelPercent < 1)
+            while (travelPercent < 1)
             {
                 travelPercent += speed * Time.deltaTime;
                 transform.position = Vector3.Lerp(startPosition, endtPosition, travelPercent);
                 yield return new WaitForEndOfFrame();
             }
         }
-        Destroy(gameObject);
+        FinishPath();
     }
 
 }
